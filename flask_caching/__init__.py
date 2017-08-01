@@ -8,11 +8,17 @@
     :copyright: (c) 2010 by Thadeus Burgess.
     :license: BSD, see LICENSE for more details.
 """
+import sys
+
+reload(sys)
+sys.setdefaultencoding('utf8')
+
 import base64
 import functools
 import hashlib
 import inspect
 import logging
+import msgpack
 import string
 import uuid
 import warnings
@@ -502,7 +508,7 @@ class Cache(object):
             else:
                 keyargs, keykwargs = args, kwargs
 
-            updated = u"{0}{1}{2}".format(altfname, keyargs, keykwargs)
+            updated = msgpack.dumps((altfname, keyargs, keykwargs))
 
             cache_key = hashlib.md5()
             cache_key.update(updated.encode('utf-8'))
